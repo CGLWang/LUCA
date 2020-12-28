@@ -1,6 +1,6 @@
 import cv2 as cv
 
-face_cascade = cv.CascadeClassifier(r'D:\python\LUCA\facebook\haarcascade_frontalface_default.xml')
+face_cascade = cv.CascadeClassifier('facebook\haarcascade_frontalface_default.xml')
 # 打开摄像机
 camera = cv.VideoCapture(0)
 # 创建窗口
