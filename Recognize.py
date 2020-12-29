@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import dlib
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read('facebook/trainner.xml')
