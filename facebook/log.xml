@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<train_log version="1">
+<train_log version="2">
 	<sample id="1" label_length="1" sample_used="0" result="trainner.xml">0,1</sample>
+	<sample id="2" label_length="0" sample_used="12" result="train.xml">xxx</sample>
 </train_log>

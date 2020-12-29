@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
-recognizer.read('facebook/trainner.yml')
+recognizer.read('facebook/trainner.xml')
 face_cascade = cv2.CascadeClassifier('facebook/haarcascade_frontalface_default.xml')
 font = cv2.FONT_HERSHEY_SIMPLEX
 

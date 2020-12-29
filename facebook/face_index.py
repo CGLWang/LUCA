@@ -78,9 +78,6 @@ def add_item_to_log(info):
 
     samples = root.getElementsByTagName('sample')
     creat_log([('version',str(root_version))],samples)
-    # fp = open(file=path_name,mode = 'w',encoding='utf-8')
-    # DOMTree.writexml(fp,newl='\n',encoding='utf-8')
-    # fp.close()
 
 
 '''
@@ -100,6 +97,13 @@ root.append(new_sample)
 tree.write(path_name,pretty_print=True)
 
 '''
+info_path = 'info.xml'
+def find_label(name):
+    pass
+def find_name(label):
+    pass
+def add_label_name(label,name):
+    pass
 
 if __name__=='__main__':
     add_item_to_log({label_len :'0',sample_used:'12',result:'train.xml',labels:'xxx'})
