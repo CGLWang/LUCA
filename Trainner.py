@@ -35,9 +35,9 @@ def get_images_and_labels():
 print('Trainning...')
 face_samples, ids = get_images_and_labels()
 t0 = time.time()
-ids = np.array([1]*len(face_samples))
+ids = np.array([1] * len(face_samples))
 recognizer.train(face_samples, ids)
 
-t =( time.time() - t0)*1000
-print("time comsumed:%.2fms"%t)
-recognizer.save('facebook/trainner.xml')
+t = (time.time() - t0) * 1000
+print("time consumed:%.2fms" % t)
+recognizer.save('facebook/trainer.xml')
