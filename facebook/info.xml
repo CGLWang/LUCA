@@ -1,5 +1,5 @@
 <facebook>
-    <face photo="photo1.png" name="PM"/>
-    <face photo="p2.png" name="G.L.Wang">
-
+    <face photo="photo1.png" name="PM" label="0"/>
+    <face photo="p2.png" name="G.L.Wang" label="1"/>
+    <face photo="x.png" name="xx" label="2"/>
 </facebook>
