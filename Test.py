@@ -2,7 +2,7 @@ import os
 import cv2
 from PIL import Image
 import numpy as np
-
+import xml.etree.ElementTree as ET
 # image_paths = []
 # path = 'Pictures/Known/'
 # for file in os.listdir(path):
@@ -46,11 +46,20 @@ import numpy as np
 # for key in ccs:
 #     print(ccs[key])
 
-thename = []
-thename.append(1)
-thename.append(2)
-thename.append(1)
-thename.append(3)
-thename.append(2)
-print(thename)
-print(np.array(thename))
+# thename = []
+# thename.append(1)
+# thename.append(2)
+# thename.append(1)
+# thename.append(3)
+# thename.append(2)
+# print(thename)
+# print(np.array(thename))
+
+# yourname = input('Please input your name:')
+name_exist = False
+m = 1
+if os.path.exists('facebook/dictionary.xml'):
+    tree = ET.parse('facebook/dictionary.xml')
+    root = tree.getroot()
+    for face in root:
+        print(face.attrib['name'])
