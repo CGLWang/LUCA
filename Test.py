@@ -21,21 +21,36 @@ import numpy as np
 # recognizer = cv2.face.LBPHFaceRecognizer_create()
 # recognizer.train()
 
-face_cascade = cv2.CascadeClassifier('facebook/haarcascade_frontalface_default.xml')
-recognizer = cv2.face.LBPHFaceRecognizer_create()
-image_paths = []
-path = 'Pictures/Known/'
-face_samples = []
-ids = []
+# face_cascade = cv2.CascadeClassifier('facebook/haarcascade_frontalface_default.xml')
+# recognizer = cv2.face.LBPHFaceRecognizer_create()
+# image_paths = []
+# path = 'Pictures/Known/'
+# face_samples = []
+# ids = []
+#
+# for file in os.listdir(path):
+#     image_paths.append(os.path.join(path, file))
+# for image_path in image_paths:
+#     img = Image.open(image_path).convert('L')
+#     img_np = np.array(img, 'uint8')
+#     id = os.path.split(image_path)[1].split('_')[1].split('.')[0]
+#     face = face_cascade.detectMultiScale(img_np)
+#     for (x, y, w, h) in face:
+#         face_samples.append(img_np[y:y + h, x:x + w])
+#         ids.append(id)
+# print(list(map(int, ids)))
 
-for file in os.listdir(path):
-    image_paths.append(os.path.join(path, file))
-for image_path in image_paths:
-    img = Image.open(image_path).convert('L')
-    img_np = np.array(img, 'uint8')
-    id = os.path.split(image_path)[1].split('_')[1].split('.')[0]
-    face = face_cascade.detectMultiScale(img_np)
-    for (x, y, w, h) in face:
-        face_samples.append(img_np[y:y + h, x:x + w])
-        ids.append(id)
-        print(id)
+
+# cc = np.load('facebook/dictionary.npy', allow_pickle=True)
+# ccs = cc[()]
+# for key in ccs:
+#     print(ccs[key])
+
+thename = []
+thename.append(1)
+thename.append(2)
+thename.append(1)
+thename.append(3)
+thename.append(2)
+print(thename)
+print(np.array(thename))
