@@ -6,7 +6,7 @@ face_cascade = cv.CascadeClassifier(r'facebook\haarcascade_frontalface_default.x
 # 打开摄像机
 camera = cv.VideoCapture(0)
 # 创建窗口
-cv.namedWindow('window')
+# cv.namedWindow('window')
 
 n = 1
 while(n <= 50):    # 拍50张照片
@@ -24,3 +24,4 @@ print('拍照完成，即将退出...')
 time.sleep(2)
 camera.release()
 cv.destroyAllWindows()
+

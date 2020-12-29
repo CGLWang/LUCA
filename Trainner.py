@@ -2,11 +2,17 @@ import cv2
 import os
 import numpy as np
 from PIL import Image
+import time
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 face_cascade = cv2.CascadeClassifier(r'haarcascade_frontalface_default.xml')
 
+
 def get_images_and_labels():
+    '''
+
+    :return: face_samples, ids
+    '''
     face_cascade = cv2.CascadeClassifier('facebook/haarcascade_frontalface_default.xml')
     image_paths = []
     path = 'Pictures/Known/'
@@ -28,9 +34,10 @@ def get_images_and_labels():
 
 print('Trainning...')
 face_samples, ids = get_images_and_labels()
-recognizer.train(face_samples, np.array(ids))
-recognizer.save('facebook/trainner.yml')
+t0 = time.time()
+ids = np.array([1]*len(face_samples))
+recognizer.train(face_samples, ids)
 
-
-
-
+t =( time.time() - t0)*1000
+print("time comsumed:%.2fms"%t)
+recognizer.save('facebook/trainner.xml')
