@@ -33,9 +33,9 @@ for file in os.listdir(path):
 for image_path in image_paths:
     img = Image.open(image_path).convert('L')
     img_np = np.array(img, 'uint8')
-    id = os.path.split(image_path)[1].split('_')[0]
+    id = os.path.split(image_path)[1].split('_')[1].split('.')[0]
     face = face_cascade.detectMultiScale(img_np)
     for (x, y, w, h) in face:
         face_samples.append(img_np[y:y + h, x:x + w])
         ids.append(id)
-recognizer.train(face_samples, np.array(ids))
+        print(id)
