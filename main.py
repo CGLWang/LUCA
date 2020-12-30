@@ -4,6 +4,7 @@ import time
 import os
 import xml
 import xml.etree.ElementTree as ET
+import shutil
 
 
 yourname = input('Please input your name:')
@@ -41,6 +42,7 @@ if os.path.exists('facebook/dictionary.xml'):
             break
     m = len(root)
     if not name_exist:
+        print(yourname + ':' + str(m + 1))
         new_node = ET.Element('face', {'name': yourname, 'label': str(m + 1)})
         root.append(new_node)
         tree.write('facebook/dictionary.xml')
@@ -73,13 +75,25 @@ while(n <= 50):    # 拍50张照片
             cv.imshow('window', img)    # 显示框出人脸的图片
 '''
 
+'''
+path = 'Pictures/'+yourname+'_Untrainned'
+if os.path.exists(path+'_trainned'):
+    shutil.rmtree(path+'_trainned')
+if os.path.exists(path):
+    shutil.rmtree(path)
+os.mkdir(path)
+'''
+if os.path.exists('Pictures/Photo/'+yourname):
+    shutil.rmtree('Pictures/Photo/'+yourname)
+os.mkdir('Pictures/Photo/'+yourname)
+path = 'Pictures/Photo/'+yourname
 n = 1
 while(n <= 50):
     success, img = camera.read()  # success：拍摄是否成功    img：拍摄的图片
     if success:
-        cv.imwrite('Pictures\\Known\\' + yourname + '_' + str(n) + '.jpg', img)
+        cv.imwrite(path + '/' + yourname + '_' + str(n) + '.jpg', img)
         n += 1
 print('拍照完成，即将退出...')
-time.sleep(2)
+time.sleep(0.5)
 camera.release()
 cv.destroyAllWindows()

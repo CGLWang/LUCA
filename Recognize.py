@@ -1,17 +1,24 @@
 import cv2
 import numpy as np
+import xml.etree.ElementTree as ET
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read('facebook/trainner.xml')
 face_cascade = cv2.CascadeClassifier('facebook/haarcascade_frontalface_default.xml')
 font = cv2.FONT_HERSHEY_SIMPLEX
-
-
 names = ['初始']
+
+'''
 read_dictionary_obj = np.load('facebook/dictionary.npy', allow_pickle=True)    # 此时读出的数据是object类型，不能直接用作字典操作
 read_dictionary = read_dictionary_obj[()]   # 把object类型转化为字典
 for key in read_dictionary:
     names.append(key)
+'''
+
+tree = ET.parse('facebook/dictionary.xml')
+root = tree.getroot()
+for face in root:
+    names.append(face.attrib['name'])
 
 camera = cv2.VideoCapture(0)
 while True:

@@ -5,13 +5,13 @@ from PIL import Image
 import xml.etree.ElementTree as ET
 
 recognizer = cv2.face.LBPHFaceRecognizer_create()
+face_cascade = cv2.CascadeClassifier('facebook/haarcascade_frontalface_default.xml')
 
-def get_images_and_labels():
-    face_cascade = cv2.CascadeClassifier('facebook/haarcascade_frontalface_default.xml')
+def get_images_and_labels(path):
     image_paths = []
-    path = 'Pictures/Known/'
     face_samples = []
     the_names = []
+
 
     for file in os.listdir(path):
         image_paths.append(os.path.join(path, file))
@@ -24,11 +24,21 @@ def get_images_and_labels():
             the_names.append(os.path.split(image_path)[1].split('_')[0])
     return face_samples, the_names
 
-
 print('Trainning...')
-ids = []
-face_samples, the_names = get_images_and_labels()
-
+'''
+for listdir in os.listdir('Pictures/'):
+    if 'Untrainned' in listdir:
+        ids = []
+        face_samples, the_names = get_images_and_labels('Pictures/' + listdir + '/')
+        tree = ET.parse('facebook/dictionary.xml')
+        root = tree.getroot()
+        for the_name in the_names:
+            for face in root:
+                if the_name == face.attrib['name']:
+                    ids.append(int(face.attrib['label']))
+        recognizer.train(face_samples, np.array(ids))
+        os.rename('Pictures/'+listdir, 'Pictures/'+listdir.split('_')[0] + '_trainned')
+'''
 # 以下为从二进制文件里读取字典数据
 '''
 read_dictionary_obj = np.load('facebook/dictionary.npy', allow_pickle=True)    # 此时读出的数据是object类型，不能直接用作字典操作
@@ -38,17 +48,16 @@ for the_name in the_names:
         if the_name == key:
             ids.append(read_dictionary[key])
 '''
-
+ids = []
+face_samples, the_names = get_images_and_labels('Pictures/Known')
+print(face_samples)
 tree = ET.parse('facebook/dictionary.xml')
 root = tree.getroot()
 for the_name in the_names:
     for face in root:
         if the_name == face.attrib['name']:
             ids.append(int(face.attrib['label']))
-
 recognizer.train(face_samples, np.array(ids))
 recognizer.save('facebook/trainner.xml')
-
-
 
 
