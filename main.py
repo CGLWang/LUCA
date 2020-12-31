@@ -6,7 +6,6 @@ import xml
 import xml.etree.ElementTree as ET
 import shutil
 
-
 yourname = input('Please input your name:')
 
 # 以下代码为用二进制形式保存字典数据
