@@ -83,7 +83,6 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
                     yourname = ''
                     self.begin_take_photo = False
             if self.begin_recognize:
-
                 img_gray = cv.cvtColor(show, cv.COLOR_BGR2GRAY)
                 faces = face_cascade.detectMultiScale(img_gray, 1.1, 5)
                 for (x, y, w, h) in faces:
@@ -118,6 +117,7 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
             self.begin_recognize = True
         else:
             self.begin_recognize = False
+
             self.pushButton.setText('识别人脸')
     def Button3_Clicked(self):
         if self.pushButton.text() == '打开摄像头':
