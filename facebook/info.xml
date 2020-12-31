@@ -1,7 +1,5 @@
-<facebook size="5">
-  <face photo="photo1.png" name="PM" label="0"/>
-  <face photo="p2.png" name="G.L.Wang" label="1"/>
-  <face label="9" name="unknown"/>
-  <face label="3" name="unknown"/>
-  <face label="5" name="unknown"/>
+<facebook>
+    <face photo="photo1.png" name="PM" label="0"/>
+    <face photo="p2.png" name="G.L.Wang" label="1"/>
+    <face photo="x.png" name="xx" label="2"/>
 </facebook>
