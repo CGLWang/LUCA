@@ -34,7 +34,7 @@
      </layout>
     </item>
     <item row="0" column="1">
-     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0">
+     <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,0,0">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -42,10 +42,10 @@
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
       <property name="topMargin">
-       <number>30</number>
+       <number>50</number>
       </property>
       <property name="bottomMargin">
-       <number>50</number>
+       <number>0</number>
       </property>
       <item>
        <widget class="QPushButton" name="pushButton_2">
@@ -71,6 +71,46 @@
         </property>
         <property name="text">
          <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton">
+        <property name="text">
+         <string>普通识别</string>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton_2">
+        <property name="text">
+         <string>较精准识别</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton_3">
+        <property name="text">
+         <string>精准识别</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_6">
+        <property name="text">
+         <string>？</string>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
         </property>
        </widget>
       </item>
@@ -178,7 +218,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>433</x>
-     <y>106</y>
+     <y>99</y>
     </hint>
     <hint type="destinationlabel">
      <x>350</x>
@@ -193,8 +233,8 @@ p, li { white-space: pre-wrap; }
    <slot>Button3_Clicked()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>433</x>
-     <y>172</y>
+     <x>438</x>
+     <y>144</y>
     </hint>
     <hint type="destinationlabel">
      <x>302</x>
@@ -234,6 +274,22 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_6</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>Button6_Clicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>383</x>
+     <y>302</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>380</x>
+     <y>323</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>Button1_Clicked()</slot>
@@ -241,5 +297,6 @@ p, li { white-space: pre-wrap; }
   <slot>Button3_Clicked()</slot>
   <slot>Button4_Clicked()</slot>
   <slot>Button5_Clicked()</slot>
+  <slot>Button6_Clicked()</slot>
  </slots>
 </ui>

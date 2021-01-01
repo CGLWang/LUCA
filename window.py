@@ -18,7 +18,7 @@ font = cv.FONT_HERSHEY_SIMPLEX
 names = ['初始']
 yourname = ''
 
-def find_dic_name(yourname):
+def find_dic_name(yourname, window):
     name_exist = False
     m = 1
     if os.path.exists('facebook/dictionary.xml'):
@@ -40,6 +40,7 @@ def find_dic_name(yourname):
         new_node = ET.SubElement(root, 'face', {'name': yourname, 'label': str(m)})
         tree = ET.ElementTree(root)
         tree.write('facebook/dictionary.xml', encoding='utf-8', xml_declaration=True)
+    _thread.start_new_thread(trainner, (window,))
 
 def trainner(window):
     def get_images_and_labels(path):
@@ -77,23 +78,32 @@ def trainner(window):
                 ids.append(int(face.attrib['label']))
     recognizer.train(face_samples, np.array(ids))
     recognizer.save('facebook/trainner.xml')
+    recognizer.read('facebook/trainner.xml')
     window.label_5.setText('人脸数据训练完成！！！')
-    window.textBrowser.append(window.yourname)
+    if window.textBrowser.toPlainText().find(window.yourname) == -1:
+        window.textBrowser.append(window.yourname)
+    window.yourname = ''
+    window.pushButton.setEnabled(True)
+    window.pushButton_2.setEnabled(True)
+    window.pushButton_3.setEnabled(True)
     window.pushButton_4.setEnabled(False)
     window.pushButton_5.setEnabled(False)
 
 def text_browser_add(window):
-    for file in os.listdir('facebook/txt_file'):
-        window.textBrowser.append(file.split('.')[0].split('_')[2])
+    if os.path.exists('facebook/dictionary.xml'):
+        tree = ET.parse('facebook/dictionary.xml')
+        root = tree.getroot()
+        for face in root:
+            window.textBrowser.append(face.attrib['name'])
 
 class Input_Name(QDialog, Ui_Dialog):
     def __init__(self):
         super(Input_Name, self).__init__()
         self.setupUi(self)
     def Button1_Clicked(self):
-        if self.textEdit.toPlainText() != '':
+        if self.lineEdit.text() != '':
             global yourname
-            yourname = self.textEdit.toPlainText()
+            yourname = self.lineEdit.text()
             self.close()
             return yourname
         else:
@@ -112,6 +122,7 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
         self.path = ''
         self.yourname = ''
         self.num = 1
+        self.photo_num = 1
         self.setupUi(self)
         self.slot_ca()
     def slot_ca(self):
@@ -122,13 +133,22 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
         if success:
             show = cv.resize(img, (640, 480))     #把读到的帧的大小重新设置为 640x480
             if self.begin_take_photo:
-                if self.num < 2:
+                if self.radioButton.isChecked():
+                    self.photo_num = 20
+                elif self.radioButton_2.isChecked():
+                    self.photo_num = 50
+                else:
+                    self.photo_num = 200
+                if self.num <= self.photo_num:
                     cv.imwrite(self.path + '/' + self.yourname + '_' + str(self.num) + '.jpg', show)
                     # os.system('Trainner_2.py') # 可以在这里直接训练数据，但是这会导致程序卡住几秒（卡住的这几秒是训练数据要的时间），这会导致程序不友好
                     show = cv.cvtColor(show, cv.COLOR_BGR2RGB)
                     showImage = QtGui.QImage(show.data, show.shape[1], show.shape[0], QtGui.QImage.Format_RGB888)
                     self.label_4.setPixmap(QtGui.QPixmap.fromImage(showImage))
                     self.label_5.setText('是否以这张图片作为人脸识别的依据？')
+                    self.pushButton.setEnabled(False)
+                    self.pushButton_2.setEnabled(False)
+                    self.pushButton_3.setEnabled(False)
                     self.pushButton_4.setEnabled(True)
                     self.pushButton_5.setEnabled(True)
                     self.num += 1
@@ -160,6 +180,7 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
             self.pushButton.setText('关闭摄像头')
             self.timer_camera.start(10)
         else:
+            self.label_2.setPixmap(QtGui.QPixmap(''))
             self.timer_camera.stop()
             self.pushButton.setText('打开摄像头')
     def Button2_Clicked(self):
@@ -183,7 +204,7 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
             global yourname
             if yourname != '':
                 self.yourname = yourname     # 得到录制的人的姓名
-                find_dic_name(self.yourname)     # 查看dictionary.xml文件里是否有该人
+                # find_dic_name(self.yourname)     # 查看dictionary.xml文件里是否有该人
 
                 self.path = 'Pictures/Photo/' + self.yourname
                 if os.path.exists(self.path):
@@ -193,12 +214,24 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
                 self.begin_take_photo = True
     def Button4_Clicked(self):
         self.label_5.setText('正在训练'+self.yourname+'的人脸数据，请稍后...')
-        # os.system('Trainner_2.py')
-        _thread.start_new_thread(trainner, (self,))
-    def Button5_Clicked(self):
-        QMessageBox.warning(self, '警告', '你选择了取消！', QMessageBox.Yes | QMessageBox.No)
+        self.pushButton.setEnabled(False)
+        self.pushButton_2.setEnabled(False)
+        self.pushButton_3.setEnabled(False)
         self.pushButton_4.setEnabled(False)
         self.pushButton_5.setEnabled(False)
+        if self.yourname != '':
+            _thread.start_new_thread(find_dic_name, (self.yourname, self, ))
+    def Button5_Clicked(self):
+        QMessageBox.warning(self, '警告', '你选择了取消！', QMessageBox.Yes | QMessageBox.No)
+        self.label_4.setPixmap(QtGui.QPixmap(''))
+        shutil.rmtree('Pictures/Photo/' + self.yourname)
+        self.pushButton.setEnabled(True)
+        self.pushButton_2.setEnabled(True)
+        self.pushButton_3.setEnabled(True)
+        self.pushButton_4.setEnabled(False)
+        self.pushButton_5.setEnabled(False)
+    def Button6_Clicked(self):
+        QMessageBox.information(self, '帮助', '普通识别：拍20张照片作基准\n\n较精准识别：拍50张照片作基准\n\n精准识别：拍200张照片作基准', QMessageBox.Yes | QMessageBox.No)
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
