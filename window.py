@@ -18,6 +18,7 @@ font = cv.FONT_HERSHEY_SIMPLEX
 names = ['初始']
 yourname = ''
 
+
 def find_dic_name(yourname, window):
     name_exist = False
     m = 1
@@ -42,20 +43,20 @@ def find_dic_name(yourname, window):
         tree.write('facebook/dictionary.xml', encoding='utf-8', xml_declaration=True)
     _thread.start_new_thread(trainner, (window,))
 
-def trainner(window):
-    def get_images_and_labels(path):
-        image_paths = []
-        for file in os.listdir(path):
-            image_paths.append(os.path.join(path, file))
-        for image_path in image_paths:
-            img = Image.open(image_path).convert('L')
-            img_np = np.array(img, 'uint8')
-            face = face_cascade.detectMultiScale(img_np)
-            for (x, y, w, h) in face:
-                face_sample = img_np[y:y + h, x:x + w]
-                the_name = os.path.split(image_path)[1].split('.')[0]
-                np.savetxt('facebook/txt_file/face_sample_' + the_name + '.txt', face_sample)
+def get_images_and_labels(path):
+    image_paths = []
+    for file in os.listdir(path):
+        image_paths.append(os.path.join(path, file))
+    for image_path in image_paths:
+        img = Image.open(image_path).convert('L')
+        img_np = np.array(img, 'uint8')
+        face = face_cascade.detectMultiScale(img_np)
+        for (x, y, w, h) in face:
+            face_sample = img_np[y:y + h, x:x + w]
+            the_name = os.path.split(image_path)[1].split('.')[0]
+            cv.imwrite('facebook/faces_data/face_sample_' + the_name + '.png',face_sample)
 
+def trainner(window):
     Photo_dirs = 'Pictures/Photo'
     for Photo_dir in os.listdir(Photo_dirs):
         get_images_and_labels(Photo_dirs + '/' + Photo_dir)
@@ -67,8 +68,12 @@ def trainner(window):
     ids = []
     face_samples = []
     the_names = []
-    for file in os.listdir('facebook/txt_file'):
-        face_samples.append(np.loadtxt('facebook/txt_file/' + file))
+    for file in os.listdir('facebook/faces_data/'):
+        if not file.endswith('.png'):
+            continue
+        img = cv.imread('facebook/faces_data/' + file,cv.IMREAD_GRAYSCALE)
+        face_samples.append(img)
+
         the_names.append(file.split('_')[2])
     tree = ET.parse('facebook/dictionary.xml')
     root = tree.getroot()
@@ -106,8 +111,8 @@ def create_dirs():
         os.mkdir(path+'/Pictures/Known')
     elif not os.path.exists(path+'/Pictures/Photo'):
         os.mkdir(path+'/Pictures/Photo')
-    if not os.path.exists(path+'/facebook/txt_file'):
-        os.mkdir(path+'/facebook/txt_file')
+    if not os.path.exists(path+'/facebook/faces_data'):
+        os.mkdir(path+'/facebook/faces_data')
 
 class Input_Name(QDialog, Ui_Dialog):
     def __init__(self):

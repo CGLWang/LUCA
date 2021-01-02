@@ -23,7 +23,7 @@ def get_images_and_labels(path):
             # face_samples.append(face_sample)
             the_name = os.path.split(image_path)[1].split('.')[0]
             # the_names.append(the_name.split('_')[0])
-            np.savetxt('facebook/txt_file/face_sample_'+the_name+'.txt', face_sample)
+            np.savetxt('facebook/faces_data/face_sample_'+the_name+'.txt', face_sample)
 
 Photo_dirs = 'Pictures/Photo'
 for Photo_dir in os.listdir(Photo_dirs):
@@ -36,8 +36,8 @@ for Photo_dir in os.listdir(Photo_dirs):
 ids = []
 face_samples = []
 the_names = []
-for file in os.listdir('../txt_file'):
-    face_samples.append(np.loadtxt('facebook/txt_file/' + file))
+for file in os.listdir('../faces_data'):
+    face_samples.append(np.loadtxt('facebook/faces_data/' + file))
     the_names.append(file.split('_')[2])
 tree = ET.parse('../dictionary.xml')
 root = tree.getroot()

@@ -116,8 +116,8 @@ if success:
 # ids = []
 # face_samples = []
 # the_names = []
-# for file in os.listdir('../txt_file'):
-#     face_samples.append(np.loadtxt('facebook/txt_file/' + file))
+# for file in os.listdir('../faces_data'):
+#     face_samples.append(np.loadtxt('facebook/faces_data/' + file))
 #     the_names.append(file.split('_')[2])
 # tree = ET.parse('../dictionary.xml')
 # root = tree.getroot()
