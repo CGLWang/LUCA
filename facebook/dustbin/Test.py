@@ -5,6 +5,11 @@ import numpy as np
 import xml.etree.ElementTree as ET
 import shutil
 
+camera = cv2.VideoCapture(0)
+success, img = camera.read()
+if success:
+    cv2.imwrite('彭敏.jpg', img)
+
 # image_paths = []
 # path = 'Pictures/Known/'
 # for file in os.listdir(path):
@@ -106,19 +111,19 @@ import shutil
 #         print("Parent folder:", parent)
 #         print("Filename:", filename)
 
-recognizer = cv2.face.LBPHFaceRecognizer_create()
-face_cascade = cv2.CascadeClassifier('facebook/haarcascade_frontalface_default.xml')
-ids = []
-face_samples = []
-the_names = []
-for file in os.listdir('facebook/txt_file'):
-    face_samples.append(np.loadtxt('facebook/txt_file/' + file))
-    the_names.append(file.split('_')[2])
-tree = ET.parse('facebook/dictionary.xml')
-root = tree.getroot()
-for the_name in the_names:
-    for face in root:
-        if the_name == face.attrib['name']:
-            ids.append(int(face.attrib['label']))
-recognizer.train(face_samples, np.array(ids))
-recognizer.save('facebook/trainner.xml')
+# recognizer = cv2.face.LBPHFaceRecognizer_create()
+# face_cascade = cv2.CascadeClassifier('facebook/haarcascade_frontalface_default.xml')
+# ids = []
+# face_samples = []
+# the_names = []
+# for file in os.listdir('../txt_file'):
+#     face_samples.append(np.loadtxt('facebook/txt_file/' + file))
+#     the_names.append(file.split('_')[2])
+# tree = ET.parse('../dictionary.xml')
+# root = tree.getroot()
+# for the_name in the_names:
+#     for face in root:
+#         if the_name == face.attrib['name']:
+#             ids.append(int(face.attrib['label']))
+# recognizer.train(face_samples, np.array(ids))
+# recognizer.save('facebook/trainner.xml')

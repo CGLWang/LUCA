@@ -31,8 +31,8 @@ else:
 
 name_exist = False
 m = 1
-if os.path.exists('facebook/dictionary.xml'):
-    tree = ET.parse('facebook/dictionary.xml')
+if os.path.exists('../dictionary.xml'):
+    tree = ET.parse('../dictionary.xml')
     root = tree.getroot()
     for face in root:
         if face.attrib['name'] == yourname:

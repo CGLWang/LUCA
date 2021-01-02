@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(260, 91)
+        Dialog.resize(260, 169)
         self.pushButton = QtWidgets.QPushButton(Dialog)
         self.pushButton.setGeometry(QtCore.QRect(20, 50, 93, 28))
         self.pushButton.setObjectName("pushButton")
@@ -24,6 +24,15 @@ class Ui_Dialog(object):
         self.lineEdit = QtWidgets.QLineEdit(Dialog)
         self.lineEdit.setGeometry(QtCore.QRect(20, 10, 221, 31))
         self.lineEdit.setObjectName("lineEdit")
+        self.label = QtWidgets.QLabel(Dialog)
+        self.label.setGeometry(QtCore.QRect(99, 90, 61, 16))
+        self.label.setObjectName("label")
+        self.label_2 = QtWidgets.QLabel(Dialog)
+        self.label_2.setGeometry(QtCore.QRect(39, 110, 171, 20))
+        self.label_2.setObjectName("label_2")
+        self.label_3 = QtWidgets.QLabel(Dialog)
+        self.label_3.setGeometry(QtCore.QRect(40, 140, 171, 20))
+        self.label_3.setObjectName("label_3")
 
         self.retranslateUi(Dialog)
         self.pushButton.clicked.connect(Dialog.Button1_Clicked)
@@ -35,3 +44,6 @@ class Ui_Dialog(object):
         Dialog.setWindowTitle(_translate("Dialog", "输入姓名"))
         self.pushButton.setText(_translate("Dialog", "确认"))
         self.pushButton_2.setText(_translate("Dialog", "取消"))
+        self.label.setText(_translate("Dialog", "注意事项"))
+        self.label_2.setText(_translate("Dialog", "1.点击确认后会立即拍照"))
+        self.label_3.setText(_translate("Dialog", "2.名字里请不要含有汉字"))
