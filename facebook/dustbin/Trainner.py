@@ -49,9 +49,9 @@ for the_name in the_names:
             ids.append(read_dictionary[key])
 '''
 ids = []
-face_samples, the_names = get_images_and_labels('Pictures/Known')
+face_samples, the_names = get_images_and_labels('../../Pictures/Known')
 print(face_samples)
-tree = ET.parse('facebook/dictionary.xml')
+tree = ET.parse('../dictionary.xml')
 root = tree.getroot()
 for the_name in the_names:
     for face in root:

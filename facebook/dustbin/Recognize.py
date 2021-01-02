@@ -16,7 +16,7 @@ for key in read_dictionary:
     names.append(key)
 '''
 
-tree = ET.parse('facebook/dictionary.xml')
+tree = ET.parse('../dictionary.xml')
 root = tree.getroot()
 for face in root:
     names.append(face.attrib['name'])

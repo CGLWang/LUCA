@@ -36,10 +36,10 @@ for Photo_dir in os.listdir(Photo_dirs):
 ids = []
 face_samples = []
 the_names = []
-for file in os.listdir('facebook/txt_file'):
+for file in os.listdir('../txt_file'):
     face_samples.append(np.loadtxt('facebook/txt_file/' + file))
     the_names.append(file.split('_')[2])
-tree = ET.parse('facebook/dictionary.xml')
+tree = ET.parse('../dictionary.xml')
 root = tree.getroot()
 for the_name in the_names:
     for face in root:

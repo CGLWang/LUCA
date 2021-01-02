@@ -101,11 +101,18 @@ class Input_Name(QDialog, Ui_Dialog):
         super(Input_Name, self).__init__()
         self.setupUi(self)
     def Button1_Clicked(self):
+        have_hanzi = False
         if self.lineEdit.text() != '':
             global yourname
             yourname = self.lineEdit.text()
-            self.close()
-            return yourname
+            for yourname_c in yourname:
+                if '\u4e00' <= yourname_c <= '\u9fa5':
+                    have_hanzi = True
+            if have_hanzi:
+                QMessageBox.warning(self, '警告', '名字里请不要有汉字', QMessageBox.Yes | QMessageBox.No)
+            else:
+                self.close()
+                return yourname
         else:
             QMessageBox.warning(self, '警告', '请输入姓名', QMessageBox.Yes | QMessageBox.No)
     def Button2_Clicked(self):
@@ -185,13 +192,16 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
             self.pushButton.setText('打开摄像头')
     def Button2_Clicked(self):
         if self.pushButton_2.text() == '识别人脸':
-            self.pushButton_2.setText('停止识别')
-            tree = ET.parse('facebook/dictionary.xml')
-            root = tree.getroot()
-            for face in root:
-                names.append(face.attrib['name'])
-            recognizer.read('facebook/trainner.xml')
-            self.begin_recognize = True
+            if self.textBrowser.toPlainText() == '':
+                QMessageBox.warning(self, '警告', '数据库里还没有人脸数据，请先输入人脸！！！', QMessageBox.Yes | QMessageBox.No)
+            else:
+                self.pushButton_2.setText('停止识别')
+                tree = ET.parse('facebook/dictionary.xml')
+                root = tree.getroot()
+                for face in root:
+                    names.append(face.attrib['name'])
+                recognizer.read('facebook/trainner.xml')
+                self.begin_recognize = True
         else:
             self.begin_recognize = False
             self.pushButton_2.setText('识别人脸')
@@ -204,8 +214,6 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
             global yourname
             if yourname != '':
                 self.yourname = yourname     # 得到录制的人的姓名
-                # find_dic_name(self.yourname)     # 查看dictionary.xml文件里是否有该人
-
                 self.path = 'Pictures/Photo/' + self.yourname
                 if os.path.exists(self.path):
                     shutil.rmtree(self.path)
