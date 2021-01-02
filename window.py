@@ -96,6 +96,19 @@ def text_browser_add(window):
         for face in root:
             window.textBrowser.append(face.attrib['name'])
 
+def create_dirs():
+    path = os.getcwd()
+    if not os.path.exists(path+'/Pictures'):
+        os.mkdir(path+'/Pictures')
+        os.mkdir(path+'/Pictures/Known')
+        os.mkdir(path+'/Pictures/Photo')
+    elif not os.path.exists(path+'/Pictures/Known'):
+        os.mkdir(path+'/Pictures/Known')
+    elif not os.path.exists(path+'/Pictures/Photo'):
+        os.mkdir(path+'/Pictures/Photo')
+    if not os.path.exists(path+'/facebook/txt_file'):
+        os.mkdir(path+'/facebook/txt_file')
+
 class Input_Name(QDialog, Ui_Dialog):
     def __init__(self):
         super(Input_Name, self).__init__()
@@ -122,6 +135,7 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(MyPyQT_Form, self).__init__()
         self.timer_camera = QtCore.QTimer()
+        self.timer_camera2 = QtCore.QTimer()
         self.camera = cv.VideoCapture(0)
         self.begin_recognize = False
         self.begin_take_photo = False
@@ -129,29 +143,32 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
         self.path = ''
         self.yourname = ''
         self.num = 1
-        self.photo_num = 1
+        self.photo_num = 1  # 用做显示camera2
+        self.photos_num = 20     # 拍多少张照片
         self.setupUi(self)
         self.slot_ca()
     def slot_ca(self):
         _thread.start_new_thread(text_browser_add, (self, ))
+        create_dirs()
         self.timer_camera.timeout.connect(self.show_camera)
+        self.timer_camera2.timeout.connect(self.show_camera2)
     def show_camera(self):
         success, img = self.camera.read()
         if success:
             show = cv.resize(img, (640, 480))     #把读到的帧的大小重新设置为 640x480
             if self.begin_take_photo:
                 if self.radioButton.isChecked():
-                    self.photo_num = 20
+                    self.photos_num = 20
                 elif self.radioButton_2.isChecked():
-                    self.photo_num = 50
+                    self.photos_num = 50
                 else:
-                    self.photo_num = 200
-                if self.num <= self.photo_num:
+                    self.photos_num = 200
+                if self.num <= self.photos_num:
                     cv.imwrite(self.path + '/' + self.yourname + '_' + str(self.num) + '.jpg', show)
                     # os.system('Trainner_2.py') # 可以在这里直接训练数据，但是这会导致程序卡住几秒（卡住的这几秒是训练数据要的时间），这会导致程序不友好
-                    show = cv.cvtColor(show, cv.COLOR_BGR2RGB)
-                    showImage = QtGui.QImage(show.data, show.shape[1], show.shape[0], QtGui.QImage.Format_RGB888)
-                    self.label_4.setPixmap(QtGui.QPixmap.fromImage(showImage))
+                    # show = cv.cvtColor(show, cv.COLOR_BGR2RGB)
+                    # showImage = QtGui.QImage(show.data, show.shape[1], show.shape[0], QtGui.QImage.Format_RGB888)
+                    # self.label_4.setPixmap(QtGui.QPixmap.fromImage(showImage))
                     self.label_5.setText('是否以这张图片作为人脸识别的依据？')
                     self.pushButton.setEnabled(False)
                     self.pushButton_2.setEnabled(False)
@@ -163,6 +180,7 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
                     global yourname
                     self.num = 1
                     self.label_3.setText(yourname + '人脸录制完成！！！')
+                    self.timer_camera2.start(10)
                     yourname = ''
                     self.begin_take_photo = False
             if self.begin_recognize:
@@ -182,6 +200,16 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
             show = cv.cvtColor(show, cv.COLOR_BGR2RGB)
             showImage = QtGui.QImage(show.data, show.shape[1], show.shape[0], QtGui.QImage.Format_RGB888)
             self.label_2.setPixmap(QtGui.QPixmap.fromImage(showImage))
+    def show_camera2(self):
+        if self.photo_num <= self.photos_num:
+            Photo_file_path = self.path + '/' + self.yourname + '_' + str(self.photo_num) + '.jpg'
+            img = cv.imread(Photo_file_path)
+            show = cv.cvtColor(img, cv.COLOR_BGR2RGB)
+            showImage = QtGui.QImage(show.data, show.shape[1], show.shape[0], QtGui.QImage.Format_RGB888)
+            self.label_4.setPixmap(QtGui.QPixmap.fromImage(showImage))
+            self.photo_num += 1
+        else:
+            self.photo_num = 1
     def Button1_Clicked(self):
         if self.pushButton.text() == '打开摄像头':
             self.pushButton.setText('关闭摄像头')
@@ -195,13 +223,15 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
             if self.textBrowser.toPlainText() == '':
                 QMessageBox.warning(self, '警告', '数据库里还没有人脸数据，请先输入人脸！！！', QMessageBox.Yes | QMessageBox.No)
             else:
-                self.pushButton_2.setText('停止识别')
+                self.label_6.setText('正在学习已有的人脸数据')
                 tree = ET.parse('facebook/dictionary.xml')
                 root = tree.getroot()
                 for face in root:
                     names.append(face.attrib['name'])
                 recognizer.read('facebook/trainner.xml')
+                self.label_6.setText('学习完成')
                 self.begin_recognize = True
+                self.pushButton_2.setText('停止识别')
         else:
             self.begin_recognize = False
             self.pushButton_2.setText('识别人脸')
@@ -209,6 +239,7 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
         if self.pushButton.text() == '打开摄像头':
             QMessageBox.warning(self, '警告', '请先打开摄像头', QMessageBox.Yes | QMessageBox.No)
         else:
+            self.begin_recognize = False
             input_name = Input_Name()
             input_name.exec_()  # 这两行为调出输入姓名的窗口
             global yourname
@@ -222,6 +253,8 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
                 self.begin_take_photo = True
     def Button4_Clicked(self):
         self.label_5.setText('正在训练'+self.yourname+'的人脸数据，请稍后...')
+        self.timer_camera2.stop()
+        self.label_4.setPixmap(QtGui.QPixmap(''))
         self.pushButton.setEnabled(False)
         self.pushButton_2.setEnabled(False)
         self.pushButton_3.setEnabled(False)
@@ -231,6 +264,7 @@ class MyPyQT_Form(QMainWindow, Ui_MainWindow):
             _thread.start_new_thread(find_dic_name, (self.yourname, self, ))
     def Button5_Clicked(self):
         QMessageBox.warning(self, '警告', '你选择了取消！', QMessageBox.Yes | QMessageBox.No)
+        self.timer_camera2.stop()
         self.label_4.setPixmap(QtGui.QPixmap(''))
         shutil.rmtree('Pictures/Photo/' + self.yourname)
         self.pushButton.setEnabled(True)
